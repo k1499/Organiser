@@ -1,29 +1,43 @@
 const pathName = require('./index.js');
+const createFolders = require('./createFolder.js');
 let fs = require('fs');
 
-fs.mkdir(pathName + '/word Files', (error) => {
-    if(error){
-        console.log('Word Files folder could not be created');
-    }
-})
-fs.mkdir(pathName + '/Excel Files', (error) => {
-    if(error){
-        console.log('Excel files folder could not be created');
-    }
-})
-fs.mkdir(pathName + '/Text Files', (error) => {
-    if(error){
-        console.log('Text files folder could not be created');
-    }
-})
+createFolders();
 
 fs.readdir(pathName, (err, files) => {
     if (err) {
       console.error(err);
       return;
     }
-        
- }
+    files.forEach((file) => {
+        if(file.indexOf('.') != -1){
+          let fileType = file.substring(file.indexOf('.'),file.length);
+          let sourceFilePath = pathName.concat('\\',file);
+          let destinationFilePath
+          if(fileType == '.txt'){
+            destinationFilePath = pathName.concat('\\Text Files\\',file);
+          }
+          else if(fileType == '.docx'){
+            destinationFilePath = pathName.concat('\\Word Files\\',file);
+          }
+          else if(fileType == '.xlsx'){
+            destinationFilePath = pathName.concat('\\Excel Files\\',file);
+          }
+          else{
+            destinationFilePath = pathName.concat('\\Miscellaneous files\\',file);
+          }
+          console.log(sourceFilePath , destinationFilePath);
+          fs.rename(sourceFilePath, destinationFilePath, (err) => {
+            if (err) {
+              console.error(err);
+              return;
+            }
+            
+            console.log('File moved successfully!');
+          });
+        }
+    })
+  }
 );
 
 
