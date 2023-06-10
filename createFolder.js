@@ -1,5 +1,5 @@
 let fs = require('fs');
-const pathName = require('./index.js');
+const pathName = require('./organiser.js');
 function createFolders(){
     fs.mkdir(pathName + '/word Files', (error) => {
         if(error){
